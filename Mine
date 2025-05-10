@@ -1,0 +1,23 @@
+# Edge detection
+edges = cv2.Canny(blurred, 50, 150)
+
+# Make the edges thicker but faster
+kernel = np.ones((2, 2), np.uint8)  # Smaller kernel for speed
+edges_dilated = cv2.dilate(edges, kernel, iterations=1)
+
+# Using Optimized Hough Transform
+lines = cv2.HoughLinesP(edges_dilated, 1, np.pi / 180, threshold=40, minLineLength=40, maxLineGap=20)
+
+# Calculate midpoint to find line's position
+avg_x.append((x1 + x2) // 2)
+
+
+# Use binary threshold for faster processing instead of adaptive threshold
+_, binary = cv2.threshold(blurred, 100, 255, cv2.THRESH_BINARY_INV)
+
+# Finding Contours:
+contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+# Calculating the Centroid of the Contour to find line's position
+M = cv2.moments(largest_contour)
+cx = int(M["m10"] / M["m00"])
