@@ -21,3 +21,16 @@ contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPL
 # Calculating the Centroid of the Contour to find line's position
 M = cv2.moments(largest_contour)
 cx = int(M["m10"] / M["m00"])
+
+total_frames += 1 # Count every processed frame
+line_detected_frames += 1 # If a line is detected
+accuracy = (line_detected_frames / total_frames) * 100 
+
+error = cx - frame_center # cx is the detected line's horizontal center
+total_deviation += abs(error) # Accumulate absolute deviation
+avg_deviation = (total_deviation / line_detected_frames)
+
+start_time = time.time()
+processing_time = (time.time() - start_time) * 1000  # Convert to milliseconds
+total_processing_time += processing_time
+avg_processing_time = (total_processing_time / total_frames) 
