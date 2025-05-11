@@ -34,3 +34,19 @@ start_time = time.time()
 processing_time = (time.time() - start_time) * 1000  # Convert to milliseconds
 total_processing_time += processing_time
 avg_processing_time = (total_processing_time / total_frames) 
+
+SHAPE_NAMES = {3: "Triangle", 4: "Rectangle", 5: "Pentagon", 6: "Hexagon"}
+shape = SHAPE_NAMES.get(vertices, "Unknown")
+
+if 0.6 < (contour_area / circle_area) < 0.9:
+    shape = "3/4 Circle"
+elif 0.9 <= (contour_area / circle_area) <= 1.1:
+    shape = "Circle"
+
+if len(good_matches) > best_match_count:
+    best_match = label
+    best_match_count = len(good_matches)
+
+# Set a minimum confidence threshold to avoid false positives
+if best_match_count > 15:  # Lowered from 15 to improve arrow detection
+        return best_match
