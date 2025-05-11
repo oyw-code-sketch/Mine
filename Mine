@@ -50,3 +50,16 @@ if len(good_matches) > best_match_count:
 # Set a minimum confidence threshold to avoid false positives
 if best_match_count > 15:  # Lowered from 15 to improve arrow detection
         return best_match
+
+# Find the largest white contour inside a blue region
+arrow = max(white_contours, key=cv2.contourArea)
+
+# Calculate the center of the white contour
+center_x = int(moments["m10"] / moments["m00"])
+center_y = int(moments["m01"] / moments["m00"])
+
+# Identify the arrow tip using contour angle
+tip = find_arrow_tip(arrow, center_x, center_y, expected_side)
+
+# Determine direction from center to tip angle
+angle = (np.arctan2(dy, dx) * 180 / np.pi + 360) % 360
